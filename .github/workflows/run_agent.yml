@@ -1,0 +1,25 @@
+name: Run Europe Job Agent
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # یہ روزانہ رات 12 بجے خود بخود کلاؤڈ پر چلے گا
+  workflow_dispatch: # اس سے آپ جب چاہیں خود بھی بٹن دبا کر چلا سکتے ہیں
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v3
+
+      - name: Setup Python environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run Sarfraz Job Agent
+        run: python agent.py
