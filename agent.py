@@ -27,7 +27,6 @@ def send_telegram_message(message):
         print(f"Telegram Error: {e}")
 
 def check_job_with_gemini(job_title, job_description):
-    # جیمنائی کا دماغ ایکٹو کرنا
     api_key = os.environ.get('GEMINI_API_KEY')
     if not api_key:
         print("Gemini API Key missing! Skipping AI matching.")
@@ -36,7 +35,6 @@ def check_job_with_gemini(job_title, job_description):
     genai.configure(api_key=api_key)
     model = genai.GenerativeModel('gemini-pro')
     
-    # جیمنائی کو دی جانے والی ہدایات (Prompt)
     prompt = f"""
     You are an AI Job Matching Assistant for Sarfraz Ahmed.
     
@@ -63,7 +61,6 @@ def check_job_with_gemini(job_title, job_description):
 def search_europe_jobs():
     print("=== Sarfraz's Europe Job Smart Agent ===")
     
-    # فرضی جاب ڈیٹا (ٹیسٹنگ کے لیے)
     sample_job_title = "International Heavy Truck Driver (CE License)"
     sample_job_desc = "Looking for an experienced driver for European routes driving curtain-side and container trailers. Minimum 5 years experience required."
     
@@ -73,14 +70,14 @@ def search_europe_jobs():
     if "MATCH" in ai_decision:
         print("Perfect Match Found!")
         alert_text = (
-            "🎯 New Perfect Job Match Found! 🎯\n\n"
-            f"💼 Job: {sample_job_title}\n"
-            "🤖 AI Analysis: جیمنائی نے اس جاب کو آپ کی پروفائل کے لیے بالکل درست پایا ہے۔\n\n"
+            "🎯 *New Perfect Job Match Found!* 🎯\n\n"
+            f"💼 *Job:* {sample_job_title}\n"
+            "🤖 *AI Analysis:* جیمنائی نے اس جاب کو آپ کی پروفائل کے لیے بالکل درست پایا ہے۔\n\n"
             "📩 اگلا سٹیپ: ای میل آٹومیشن کی تیاری کی جا رہی ہے۔"
         )
         send_telegram_message(alert_text)
     else:
         print("Job did not match Sarfraz's profile.")
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     search_europe_jobs()
