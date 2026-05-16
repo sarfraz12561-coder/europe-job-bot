@@ -79,5 +79,6 @@ def search_europe_jobs():
     else:
         print("Job did not match Sarfraz's profile.")
 
-if __name__ == "__main__": 
+if __name__ == "__main__":
     search_europe_jobs()
+    
