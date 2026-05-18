@@ -3,7 +3,11 @@ import requests
 from bs4 import BeautifulSoup
 import google.generativeai as genai
 
-# اب تک پروفائل کا ڈیٹا جو جیمنائ ہینڈل کر رہا ہے کا ہے
+# 🎯 آپ کا جیمنائ اے پی آئی اور ٹیلی گرام ٹوکن بالکل ریڈی ہے
+GEMINI_API_KEY = "AIzaSyC94U3meMYZImhNedVy8ycvawoAD8wGmu8"
+TELEGRAM_BOT_TOKEN = "8929044021:AAG-_qvCX1kRRRTZ0sQKphpbP0acmhnYHn0"
+TELEGRAM_CHAT_ID = "8699175083"  # آپ کی کنفرم چیٹ آئی ڈی
+
 SARFRAZ_PROFILE = """
 Candidate Name: Sarfraz Ahmed
 Experience: 6+ Years as a Heavy Truck Driver
@@ -12,15 +16,12 @@ Target Roles: Long-haul heavy truck driving, international logistics transport.
 """
 
 def send_telegram_message(message):
-    bot_token = os.environ.get('TELEGRAM_BOT_TOKEN')
-    chat_id = os.environ.get('TELEGRAM_CHAT_ID')
-    
-    if not bot_token or not chat_id:
+    if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
         print("Error: Telegram credentials missing!")
         return
 
-    url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
-    payload = {"chat_id": chat_id, "text": message, "parse_mode": "Markdown"}
+    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
+    payload = {"chat_id": TELEGRAM_CHAT_ID, "text": message, "parse_mode": "Markdown"}
     
     try:
         requests.post(url, json=payload)
@@ -28,12 +29,11 @@ def send_telegram_message(message):
         print(f"Telegram Error: {e}")
 
 def check_job_with_gemini(job_title, job_description):
-    api_key = os.environ.get("GEMINI_API_KEY")
-    if not api_key:
+    if not GEMINI_API_KEY:
         print("Gemini API Key missing! Skipping AI matching.")
         return "NO_MATCH"
 
-    genai.configure(api_key=api_key)
+    genai.configure(api_key=GEMINI_API_KEY)
     model = genai.GenerativeModel('gemini-pro')
 
     prompt = f"""
@@ -68,7 +68,6 @@ def search_europe_jobs():
     print("Analyzing job with Gemini AI...")
     ai_decision = check_job_with_gemini(sample_job_title, sample_job_desc)
 
-    # یہاں اب ڈیٹا ٹائپ اور اسپیسنگ بالکل درست ہے
     if isinstance(ai_decision, str) and "MATCH" in ai_decision:
         print("Perfect Match Found!")
         alert_text = (
