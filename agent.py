@@ -24,7 +24,8 @@ def send_telegram_message(message):
     payload = {"chat_id": TELEGRAM_CHAT_ID, "text": message, "parse_mode": "Markdown"}
     
     try:
-        requests.post(url, json=payload)
+        r = requests.post(url, json=payload)
+        print(f"Telegram Response: {r.status_code} - {r.text}")
     except Exception as e:
         print(f"Telegram Error: {e}")
 
@@ -33,10 +34,12 @@ def check_job_with_gemini(job_title, job_description):
         print("Gemini API Key missing! Skipping AI matching.")
         return "NO_MATCH"
 
-    genai.configure(api_key=GEMINI_API_KEY)
-    model = genai.GenerativeModel('gemini-pro')
+    try:
+        genai.configure(api_key=GEMINI_API_KEY)
+        # 🟢 یہاں بالکل نیا اور ایکٹو ماڈل 'gemini-1.5-flash' سیٹ کر دیا ہے
+        model = genai.GenerativeModel('gemini-1.5-flash')
 
-    prompt = f"""
+        prompt = f"""
 You are an AI Job Watching Assistant for Sarfraz Ahmed.
 
 Sarfraz's Profile:
@@ -50,8 +53,6 @@ Task:
 Determine if this job is a 100% match for Sarfraz's experience in Heavy Truck Driving (specifically Container, Flatbed, Curtain-side).
 Respond with EXACTLY 'MATCH' or 'NO_MATCH' followed by a 1-sentence reason in Urdu.
 """
-
-    try:
         response = model.generate_content(prompt)
         result = response.text.strip()
         return result
@@ -67,6 +68,7 @@ def search_europe_jobs():
 
     print("Analyzing job with Gemini AI...")
     ai_decision = check_job_with_gemini(sample_job_title, sample_job_desc)
+    print(f"AI Decision: {ai_decision}")
 
     if isinstance(ai_decision, str) and "MATCH" in ai_decision:
         print("Perfect Match Found!")
